@@ -1,8 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const User = require('../models/user')
+const bcrpyt = require('bcrypt')
 
-// const users = []
+const jwt = require('jsonwebtoken')
 
 router.get('/', async (req, res) => {
     try {
@@ -14,9 +15,10 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
+    const hashedPassword = await bcrpyt.hash(req.body.password, 10)
     const user = new User({
         name: req.body.name,
-        password: req.body.password
+        password: hashedPassword
     })
     try {
         const newUser = await user.save()
@@ -26,32 +28,24 @@ router.post('/', async (req, res) => {
     }
 })
 
-// router.post('/users', async (req, res) => {
-//     try {
-//         const hashedPassword = await bcrpyt.hash(req.body.password, 10)
-//         const user = { name: req.body.name, password: hashedPassword}
-//         users.push(user)
-//         res.status(201).send({status: "Complete"})
-//     } catch {
-//         res.status(500).send()
-//     }
-// })
+router.post('/login', async (req, res) => {
+    const users = await User.find()
 
-// router.post('/users/login', async (req, res) => {
-//     const user = users.find(user => user.name === req.body.name)
-//     if(user == null){
-//         return res.status(400).send("User not found")
-//     }
+    const user = users.find(user => user.name === req.body.name)
+    if(user == null){
+        const accessToken = jwt.sign(user)
+        return res.status(400).send("User not found")
+    }
     
-//     try {
-//         if(await bcrpyt.compare(req.body.password, user.password)){
-//             res.send({status: "Success", name: user.name})
-//         } else {
-//             res.send("Auth failed")
-//         }
-//     } catch {
-//         res.status(500).send()
-//     }
-// })
+    try {
+        if(await bcrpyt.compare(req.body.password, user.password)){
+            res.send({status: "Success", name: user.name})
+        } else {
+            res.send("Auth failed")
+        }
+    } catch {
+        res.status(500).send()
+    }
+})
 
 module.exports = router
