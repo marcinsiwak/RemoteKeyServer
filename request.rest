@@ -2,14 +2,26 @@ GET http://localhost:3000/users
 
 
 ###
+GET http://localhost:3000/users/auth
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDU4YTRkNGQyMjI2YzY4NGYxNjI2NjIiLCJuYW1lIjoiamEiLCJwYXNzd29yZCI6IiQyYiQxMCRJbnBYZHFMY2ovRXIzL3lWZWVGRS91TzVhbWhGejladWdVTWpJenpkWUFZcWE4eXVzR0dBLiIsIl9fdiI6MCwiaWF0IjoxNjE2NDIzODI1LCJleHAiOjE2MTY1MTAyMjV9.DBy7Ed1rPT8FXC8zRtDhzoNW-LxQBm-4vKaZ8nPNZyA
 
+# ###
+
+DELETE http://localhost:3000/users/logout 
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDU4OTc2MGNlNzQ0NDU5MmIzOTZlYjYiLCJuYW1lIjoiamEiLCJwYXNzd29yZCI6IiQyYiQxMCRFM0pDbWRaTVJ2SzYyalVwRjYzN2tPU3lMU09oZFVhLkh3d3RwZlVMcVdzbUk1OVJJaWIuQyIsIl9fdiI6MCwiaWF0IjoxNjE2NDE4NzQyfQ.Cs4IwTe3rz2zLZe8lY2mpE16OnS02EqTi6JxZ2ZVsl4"
+}
+
+###
 
 POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-    "name": "Marcin",
-    "password": "password"
+    "name": "ja",
+    "password": "jaa"
 }
 
 ###
@@ -18,6 +30,6 @@ POST http://localhost:3000/users/login
 Content-Type: application/json
 
 {
-    "name": "Marcin",
-    "password": "password"
+    "name": "ja",
+    "password": "jaa"
 }
