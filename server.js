@@ -1,10 +1,10 @@
+require('dotenv').config()
 
 const express = require('express')
 const app  = express()
-const bcrpyt = require('bcrypt')
 const mongoose = require('mongoose')
 
-mongoose.connect('mongodb+srv://user:hwADuMZX1BK279uD@cluster0.xpuvh.mongodb.net/magisterska?retryWrites=true&w=majority', {useNewUrlParser: true})
+mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true})
 const db = mongoose.connection
 
 db.on("error", (error) => console.error(error))
