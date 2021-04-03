@@ -13,9 +13,10 @@ db.once('open', () => console.log("Connected to Database"))
 app.use(express.json())
 
 const usersRouter = require('./routers/users')
+const securityRouter = require('./routers/security')
 
 app.use('/users', usersRouter)
-
+app.use('/security', securityRouter)
 
 
 app.listen(3000)

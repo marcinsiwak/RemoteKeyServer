@@ -2,8 +2,8 @@ GET http://localhost:3000/users
 
 
 ###
-GET http://localhost:3000/users/auth
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDU4YTRkNGQyMjI2YzY4NGYxNjI2NjIiLCJuYW1lIjoiamEiLCJwYXNzd29yZCI6IiQyYiQxMCRJbnBYZHFMY2ovRXIzL3lWZWVGRS91TzVhbWhGejladWdVTWpJenpkWUFZcWE4eXVzR0dBLiIsIl9fdiI6MCwiaWF0IjoxNjE2NDIzODI1LCJleHAiOjE2MTY1MTAyMjV9.DBy7Ed1rPT8FXC8zRtDhzoNW-LxQBm-4vKaZ8nPNZyA
+GET http://localhost:3000/users/currentUser
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDU4YTRkNGQyMjI2YzY4NGYxNjI2NjIiLCJuYW1lIjoiamEiLCJwYXNzd29yZCI6IiQyYiQxMCRJbnBYZHFMY2ovRXIzL3lWZWVGRS91TzVhbWhGejladWdVTWpJenpkWUFZcWE4eXVzR0dBLiIsIl9fdiI6MCwiaWF0IjoxNjE2NjkxNDE4LCJleHAiOjE2MTY3Nzc4MTh9.inWedm0MZQeRdOkEe6tU25ZoxK5XYaM5LS4-QquACAg
 
 # ###
 
@@ -20,8 +20,8 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-    "name": "ja",
-    "password": "jaa"
+    "name": "A",
+    "password": "AAA"
 }
 
 ###
@@ -30,6 +30,17 @@ POST http://localhost:3000/users/login
 Content-Type: application/json
 
 {
-    "name": "ja",
-    "password": "jaa"
+    "name": "nj",
+    "password": "haslo"
+}
+
+###
+
+POST http://localhost:3000/security/pin
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDVjYzVjM2Y3NzE0MzQ5Mjg4NTE4OTMiLCJuYW1lIjoiTWFyY2luIiwicGFzc3dvcmQiOiIkMmIkMTAkVzF0OExaVFlBc2xRa3FCZGc3ZVVmLmx6WHBtbFlJdmZoem0xWk5HQmRiaERObnlMbXljOUciLCJfX3YiOjAsImlhdCI6MTYxNjk0MzEwMiwiZXhwIjoxNjE3MDI5NTAyfQ.WYQPQHgZYu6-J2Hy954qtFG_EeF4LvDkzexVs_khdzA
+
+{
+    "userId": "",
+    "pin": "111111"
 }

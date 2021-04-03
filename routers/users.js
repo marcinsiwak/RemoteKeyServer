@@ -9,13 +9,20 @@ const jwt = require('jsonwebtoken')
 
 let authTokens = []
 
-router.get('/auth', authToken, async (req, res) => {
+router.get('/currentUser', authToken, async (req, res) => {
     try {
         const users = await User.find()
 
         const user = users.find(user => user.name === req.user.name)
+
+        const userResponse = {
+            name: user.name,
+            hasPin: user.hasPin,
+            hasFingerprint: user.hasFingerprint,
+            hasPattern: user.hasPattern
+        }
     
-        res.json(user)
+        res.json(userResponse)
     } catch (err) {
         res.status(500).json({message: err.message})
     }
@@ -57,8 +64,15 @@ router.post('/login', async (req, res) => {
         if(await bcrpyt.compare(req.body.password, user.password)){
         const accessToken = jwt.sign(user.toJSON(), process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' })
         authTokens.push(accessToken)
+
+        const userResponse = {
+            name: user.name,
+            hasPin: user.hasPin,
+            hasFingerprint: user.hasFingerprint,
+            hasPattern: user.hasPattern
+        }
         
-        res.send({status: "Success", name: user.name, accessToken: accessToken})
+        res.send({status: "Success", userModel: userResponse, accessToken: accessToken})
         } else {
             res.send("Auth failed")
         }
