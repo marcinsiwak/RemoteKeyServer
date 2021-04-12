@@ -31,8 +31,8 @@ router.post('/pattern', authToken, async (req, res) => {
             pattern: hashedPattern
         })
 
-        const newPin = await securityPattern.save()
-        res.status(201).json(newPin)
+        const newPattern = await securityPattern.save()
+        res.status(201).json(newPattern)
     } catch (err) {
         res.status(400).json({message: err.message})
     }

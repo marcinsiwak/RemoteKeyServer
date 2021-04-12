@@ -14,9 +14,10 @@ app.use(express.json())
 
 const usersRouter = require('./routers/users')
 const securityRouter = require('./routers/security')
+const locksRouter = require('./routers/locks')
 
 app.use('/users', usersRouter)
 app.use('/security', securityRouter)
-
+app.use('/locks', locksRouter)
 
 app.listen(3000)
