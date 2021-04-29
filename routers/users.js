@@ -18,7 +18,6 @@ router.get('/currentUser', authToken, async (req, res) => {
         const userResponse = {
             name: user.name,
             hasPin: user.hasPin,
-            hasFingerprint: user.hasFingerprint,
             hasPattern: user.hasPattern
         }
     
@@ -68,7 +67,6 @@ router.post('/login', async (req, res) => {
         const userResponse = {
             name: user.name,
             hasPin: user.hasPin,
-            hasFingerprint: user.hasFingerprint,
             hasPattern: user.hasPattern
         }
         

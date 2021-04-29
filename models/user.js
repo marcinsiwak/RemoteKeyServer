@@ -13,10 +13,6 @@ const userScheme = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    hasFingerprint: {
-        type: Boolean,
-        default: false
-    },
     hasPattern: {
         type: Boolean,
         default: false

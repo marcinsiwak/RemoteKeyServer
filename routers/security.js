@@ -2,11 +2,93 @@ const express = require('express')
 const router = express.Router()
 const Pin = require('../models/pin')
 const User = require('../models/user')
-const Fingerprint = require('../models/fingerprint')
 const Pattern = require('../models/pattern')
 
 const bcrpyt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+
+var net = require('net');
+
+var server = net.createServer()  
+server.on('connection', function(socket){
+    socket.write('Connected');
+
+router.post('/pattern/open', authToken, async (req, res) => {
+    try {
+        const users = await User.find()
+
+        const user = users.find(user => user.name === req.user.name)
+
+        const patterns = await Pattern.find()
+
+        const pattern = patterns.find(pattern => pattern.userId === String(user._id))
+
+        if(await bcrpyt.compare(req.body.pattern, pattern.pattern)){
+            res.status(200).json({message: "Correct pattern"}) 
+            socket.write('Opened', function(error){
+                console.log(error)
+            });
+            
+        } else {
+            console.log("pattern", "WRONG")
+            res.status(400).json({message: "Wrong pattern"})
+        
+            socket.write('Locked', function(error){
+                console.log(error)
+            });
+        }
+
+    } catch (err) {
+        res.status(400).json({message: err.message})
+    }
+})
+
+router.post('/pin/open', authToken, async (req, res) => {
+    try {
+        const users = await User.find()
+
+        const user = users.find(user => user.name === req.user.name)
+
+        const pins = await Pin.find()
+
+        const pin = pins.find(pin => pin.userId === String(user._id))
+        console.log("pin", pin)
+
+        if(await bcrpyt.compare(req.body.pin, pin.pin)){
+            console.log("pin", "Correct")
+            res.status(200).json({message: "Correct pin"})
+            socket.write('Open');
+
+        } else {
+            console.log("pin", "WRONG")
+
+            res.status(400).json({message: "Wrong pin"})
+        }
+
+    } catch (err) {
+        res.status(400).json({message: err.message})
+    }
+})
+
+router.post('/fingerprint/open', authToken, async (req, res) => {
+    try {
+        if(req.body.isFingerprintCorrect){
+            res.status(200).json({message: "Authorized!"})
+            socket.write('Open');
+
+        }else{
+            res.status(400).json({message: "Auth failed, fingerprint option is locked"})
+        }
+      
+    } catch (err) {
+        res.status(400).json({message: err.message})
+    }
+})
+
+})
+
+server.listen(8080)
+
 
 router.post('/pattern', authToken, async (req, res) => {
     const hashedPattern = await bcrpyt.hash(req.body.pattern, 10)
@@ -38,29 +120,6 @@ router.post('/pattern', authToken, async (req, res) => {
     }
 })
 
-router.post('/pattern/open', authToken, async (req, res) => {
-    try {
-        const users = await User.find()
-
-        const user = users.find(user => user.name === req.user.name)
-
-        const patterns = await Pattern.find()
-
-        const pattern = patterns.find(pattern => pattern.userId === String(user._id))
-
-        if(await bcrpyt.compare(req.body.pattern, pattern.pattern)){
-            res.status(200).json({message: "Correct pattern"})
-        } else {
-            console.log("pattern", "WRONG")
-
-            res.status(400).json({message: "Wrong pattern"})
-        }
-
-    } catch (err) {
-        res.status(400).json({message: err.message})
-    }
-})
-
 router.post('/pin', authToken, async (req, res) => {
     const hashedPin = await bcrpyt.hash(req.body.pin, 10)
     try {
@@ -86,45 +145,6 @@ router.post('/pin', authToken, async (req, res) => {
 
         const newPin = await securityPin.save()
         res.status(201).json(newPin)
-    } catch (err) {
-        res.status(400).json({message: err.message})
-    }
-})
-
-router.post('/pin/open', authToken, async (req, res) => {
-    try {
-        const users = await User.find()
-
-        const user = users.find(user => user.name === req.user.name)
-
-        const pins = await Pin.find()
-
-        const pin = pins.find(pin => pin.userId === String(user._id))
-        console.log("pin", pin)
-
-        if(await bcrpyt.compare(req.body.pin, pin.pin)){
-            console.log("pin", "Correct")
-            res.status(200).json({message: "Correct pin"})
-        } else {
-            console.log("pin", "WRONG")
-
-            res.status(400).json({message: "Wrong pin"})
-        }
-
-    } catch (err) {
-        res.status(400).json({message: err.message})
-    }
-})
-
-
-router.post('/fingerprint/open', authToken, async (req, res) => {
-    try {
-        if(req.body.isFingerprintCorrect){
-            res.status(200).json({message: "Authorized!"})
-        }else{
-            res.status(400).json({message: "Auth failed, fingerprint option is locked"})
-        }
-      
     } catch (err) {
         res.status(400).json({message: err.message})
     }
